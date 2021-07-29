@@ -2,7 +2,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.urls import reverse_lazy
-
 from .models import Task, Category
 
 
@@ -15,6 +14,9 @@ class TaskListView(LoginRequiredMixin, ListView):
     """
     model = Task
     template_name = 'tasks/task_list.html'
+
+    def get_queryset(self):
+        return Task.objects.filter(user=self.request.user)
 
 
 class TaskDetailView(LoginRequiredMixin, DetailView):
@@ -55,7 +57,17 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
     """
     model = Task
     template_name = 'tasks/new_task.html'
-    fields = ('title', 'description', 'category', 'priority', 'deadline')
+    fields = ('title', 'description', 'category', 'status', 'priority', 'deadline')
+
+    def get_form(self, form_class=None):
+        """
+        هر کاربر حق داره فقط دسته بندی هایی که خودش تعریف کرده ببینه و انتخاب کنه
+        :param form_class: اگر فرم کاستوم تعریف شده بود
+        :return: فرم با دسته بندی شخصی سازی شده
+        """
+        form = super(TaskCreateView, self).get_form(form_class)
+        form.fields["category"].queryset = self.request.user.user_categories.all()
+        return form
 
     def form_valid(self, form):
         """
@@ -77,12 +89,22 @@ class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     :fields: فیلدهای قابل ویرایش (منطقی نیست که کاربر آن برای ویرایش در دسترس باشد.)
     """
     model = Task
-    fields = ('title', 'description', 'category', 'priority', 'deadline')
+    fields = ('title', 'description', 'category', 'status', 'priority', 'deadline')
     template_name = 'tasks/task_edit.html'
+
+    def get_form(self, form_class=None):
+        """
+        هر کاربر حق داره فقط دسته بندی هایی که خودش تعریف کرده ببینه و انتخاب کنه
+        :param form_class: اگر فرم کاستوم تعریف شده بود
+        :return: فرم با دسته بندی شخصی سازی شده
+        """
+        form = super(TaskUpdateView, self).get_form(form_class)
+        form.fields["category"].queryset = self.request.user.user_categories.all()
+        return form
 
     def test_func(self):
         obj = self.get_object()
-        return obj.author == self.request.user
+        return obj.user == self.request.user
 
 
 # category views
@@ -97,6 +119,9 @@ class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
     template_name = 'tasks/category_list.html'
 
+    def get_queryset(self):
+        return Category.objects.filter(user=self.request.user)
+
 
 class CategoryTasksListView(LoginRequiredMixin, ListView):
     """
@@ -108,18 +133,24 @@ class CategoryTasksListView(LoginRequiredMixin, ListView):
     model = Category
     template_name = 'tasks/category_detail_list.html'
 
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        context['category_tasks_list'] = Task.objects.all()
-        return context
+    def get_queryset(self):
+        return Category.objects.filter(user=self.request.user)
 
 
 class CategoryCreateView(LoginRequiredMixin, CreateView):
     model = Category
     template_name = 'tasks/new_ctg.html'
     fields = ('name',)
+
+    def form_valid(self, form):
+        """
+        اتوماتیک یوزر فعال به عنوان صاحب دسته بندی انتخاب شود
+        :param form: فرمی که با آن دسته بندی ایجاد می شود
+        :return: خروجی متد والد تغییریافته :
+        HttpResponseRedirect(self.get_success_url())
+        """
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class DeleteCategoryView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):

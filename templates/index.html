@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
-    {% block title %}MyTasks | homepage{% endblock %}
+    {% block title %}مدیریت تسک ها | خانه{% endblock %}
     {% block content %}
         <div class="container m-5">
             <ul>
-            <li><a href="{% url 'admin:index' %}">ادمین</a></li>
-            <li><a href="{% url 'categories' %}">دسته بندی ها</a></li>
-            <li><a href="{% url 'task_list' %}">تسک ها</a></li>
+                {% if user.is_superuser %}
+                    <li><a href="{% url 'admin:index' %}">ادمین</a></li>
+                {% endif %}
+                <li><a href="{% url 'categories' %}">دسته بندی ها</a></li>
+                <li><a href="{% url 'task_list' %}">تسک ها</a></li>
             </ul>
             <a href="{% url 'task_create' %}">ایجاد تسک</a>
             <br>

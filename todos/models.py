@@ -5,27 +5,35 @@ from django.urls import reverse
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='user_categories')
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['name', 'user'], name='unique_group')
+        ]
 
     def __str__(self):
-        return f'{self.name} ({self.id})'
+        return self.name
 
     def get_absolute_url(self):
-        return reverse('categories', args=[str(self.id)])
+        return reverse('category_tasks_list', args=[str(self.id)])
 
 
 class Task(models.Model):
     PRIORITY = [
-        ('1', 'urgent & important'),  # الان انجامش بده
-        ('2', 'urgent & unimportant'),  # بسپار به دیگری یا یه وقتی براش خالی کن
-        ('3', 'not urgent & important'),  # براش برنامه ریزی کن
-        ('4', 'not urgent & unimportant'),  # ترجیحاٌ حذفش کن یا بذار برای تعطیلات
+        ('1', 'مهم و فوری'),  # الان انجامش بده
+        ('2', 'غیرمهم و فوری'),  # بسپار به دیگری یا یه وقتی براش خالی کن
+        ('3', 'مهم و غیرفوری'),  # براش برنامه ریزی کن
+        ('4', 'غیرمهم و غیرقری'),  # ترجیحاٌ حذفش کن یا بذار برای تعطیلات
     ]
+    STATUS= [('U', 'ناتمام'), ('D', 'انجام شد')]
     title = models.CharField(max_length=150)
     description = models.TextField(max_length=720, blank=True, default='')
-    category = models.ManyToManyField(Category, related_name='category')
+    category = models.ManyToManyField(Category, related_name='category', related_query_name='cat_tasks')
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='tasks')
     priority = models.CharField(max_length=2, choices=PRIORITY)
     deadline = models.DateTimeField()
+    status = models.CharField(max_length=1, default='U', choices=STATUS)
 
     class Meta:
         ordering = ['deadline']

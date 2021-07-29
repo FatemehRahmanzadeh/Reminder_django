@@ -1,1 +1,29 @@
-task detail test
+{% extends 'base.html' %}
+{% block title %}task detail{% endblock %}
+{% block content %}
+    <h1 class="m-5">جزییات "{{ object.title }}"</h1>
+    <div class="container w-50 my-5">
+            <div class="card" style="width: 30rem; background-color: azure">
+      <div class="card-body">
+        <h5 class="card-title my-2">{{ object.title }}</h5>
+        <h6 class="card-subtitle my-2 text-muted">
+            {% for cat in object.category.all %}
+                <a href="{% url 'category_tasks_list' cat.pk %}">{{ cat.name }}</a>|
+            {% endfor %}
+        </h6>
+      <div class="container card py-3" style="background-color: aliceblue;">
+          <div class="row py-3 px-2">
+              <div class="col-12">اولویت:  {{ object.get_priority_display }}</div>
+              <div class="col-12">سررسید:  {{ object.deadline }}</div>
+              <div class="col-12">وضعیت:   {{ object.get_status_display }}</div>
+
+          </div>
+
+      </div>
+        <p class="card-text my-3 card p-2">{{ object.description }}</p>
+        <a href="{% url 'edit_task' object.pk %}" class="card-link"><button class="btn btn-primary">ویرایش</button></a>
+        <a href="{% url 'delete_task' object.pk %}" class="card-link"><button class="btn btn-danger">حذف</button></a>
+      </div>
+    </div>
+    </div>
+{% endblock %}

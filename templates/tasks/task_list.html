@@ -8,30 +8,42 @@
               <th scope="col">ردیف</th>
               <th scope="col">عنوان تسک</th>
               <th scope="col">دسته بندی ها</th>
-              <th scope="col">عملیات</th>
+              <th scope="col">زمان سررسید</th>
+              <th scope="col">اولویت</th>
+                <th scope="col">وضعیت</th>
+              <th scope="col">ویرایش/حذف</th>
             </tr>
           </thead>
           <tbody>
             {% for task in object_list %}
                 <tr>
-                  <th scope="row">{{ task.pk }}</th>
-                  <td>{{ task.title }}</td>
+                  <th scope="row">{{ forloop.counter }}</th>
+                  <td><a href="{% url 'details' task.pk%}">{{ task.title }}</a></td>
                   <td>
                       {% for category in task.category.all %}
                           <a href="{% url 'category_tasks_list' category.pk %}">{{ category.name }}</a>|
                       {% endfor %}
                   </td>
-                  <td>
-                      <div class="dropdown show">
-                      <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        انتخاب کنید
-                      </a>
+                    <td>{{ task.deadline }}</td>
+{#                    <td>#}
+{#                        <div class="form-check form-switch">#}
+{#                          <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">#}
+{#                          <label class="form-check-label" for="flexSwitchCheckDefault">{{ task.get_status_display }}</label>#}
+{#                        </div>#}
+{#                    </td>#}
+                    <td>{{ task.get_priority_display }}</td>
+                    <td>{{ task.get_status_display }}</td>
+                    <td>
+                         <div class="dropdown">
+                              <a class="btn btn-secondary dropdown-toggle" href="" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                انتخاب کنید
+                              </a>
 
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="{% url 'delete_task' task.pk %}">حذف</a>
-                        <a class="dropdown-item" href="{% url 'edit_task' task.pk %}">ویرایش</a>
-                      </div>
-                    </div>
+                              <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <li><a class="dropdown-item" href="{% url 'edit_task' task.pk %}">ویرایش</a></li>
+                                <li><a class="dropdown-item" href="{% url 'delete_task' task.pk %}">حذف</a></li>
+                              </ul>
+                         </div>
                   </td>
                 </tr>
           {% endfor %}

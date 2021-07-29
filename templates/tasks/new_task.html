@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
-    <h1>تسک جدید</h1>
+    <div class="container m-5 d-flex justify-content-center">
     <form action="" method="post">{% csrf_token %}
-        {{ form.as_p }}
-        <button class="btn btn-success ml-2" type="submit">Save</button>
+        <h1 class="mb-5">تسک جدید</h1>
+        {{ form|crispy }}
+        <button class="btn btn-success ml-2" type="submit">ذخیره شود</button>
     </form>
+    </div>
 {% endblock content %}
