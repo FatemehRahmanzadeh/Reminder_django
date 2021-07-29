@@ -9,7 +9,7 @@
 - username: فاطمه
 - password: 1234
 ### Please note that apps do not have migration files. You need to run migrations first,
-'''
+```
 python manage.py makemigrations
 python manage.py migrate
-'''
+```
