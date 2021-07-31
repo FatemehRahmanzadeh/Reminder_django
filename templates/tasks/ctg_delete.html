@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}delete{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>حذف "{{ object.name }}"</h1>
+        <div class="container m-5 rounded">
+            <form action="" method="post">{% csrf_token %}
+            <p>مطمئنی میخوای دسته  "{{ object.name }}" رو حذف کنی؟</p>
+            <button class="btn btn-danger ml-2" type="submit">تایید</button>
+        </form>
+        </div>
+    </div>
+{% endblock %}

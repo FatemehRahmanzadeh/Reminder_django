@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container m-5 d-flex justify-content-center">
+    <form action="" method="post">{% csrf_token %}
+        <h1 class="mb-5">ویرایش "{{ object.name }}"</h1>
+        {{ form|crispy }}
+        <button class="btn btn-info ml-2 my-3" type="submit">بروز رسانی</button>
+    </form>
+    </div>
+
+{% endblock content %}

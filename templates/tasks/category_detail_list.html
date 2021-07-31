@@ -1,3 +1,112 @@
-{% for obj in object_list %}
-    {{ obj.cat_tasks.all}}
-    {% endfor %}
+{% extends 'base.html' %}
+{% load template_tags %}
+{% block title %}لیست تسک ها | {{ category_name }}{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1 class="my-4">تسک های دسته "{{ category_name }}"</h1>
+        <div class="container my-5 border rounded-3" style="background-color: lightblue;">
+            <h3 class="my-4">تسک های انجام شده:</h3>
+            <table class="table table-hover table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">ردیف</th>
+                  <th scope="col">عنوان تسک</th>
+                  <th scope="col">دسته بندی ها</th>
+                  <th scope="col">زمان سررسید</th>
+                  <th scope="col">مهلت</th>
+                  <th scope="col">اولویت</th>
+                    <th scope="col">وضعیت</th>
+                  <th scope="col">ویرایش/حذف</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for task in done %}
+                    <tr>
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td><a href="{% url 'details' task.pk%}">{{ task.title |capfirst }}</a></td>
+                      <td>
+                          {% for category in task.category.all %}
+                              <a href="{% url 'category_tasks_list' category.pk %}">{{ category.name }}</a>|
+                          {% endfor %}
+                      </td>
+                        <td>{{ task.deadline }}</td>
+                        <td>{% task_time_left task %}</td>
+    {#                    <td>#}
+    {#                        <div class="form-check form-switch">#}
+    {#                          <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">#}
+    {#                          <label class="form-check-label" for="flexSwitchCheckDefault">{{ task.get_status_display }}</label>#}
+    {#                        </div>#}
+    {#                    </td>#}
+                        <td>{{ task.get_priority_display }}</td>
+                        <td>{{ task.get_status_display }}</td>
+                        <td>
+                             <div class="dropdown">
+                                  <a class="btn btn-secondary dropdown-toggle" href="" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                    انتخاب کنید
+                                  </a>
+
+                                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <li><a class="dropdown-item" href="{% url 'edit_task' task.pk %}">ویرایش</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'delete_task' task.pk %}">حذف</a></li>
+                                  </ul>
+                             </div>
+                      </td>
+                    </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+        </div>
+    <div class="container my-5 border rounded-3" style="background-color: antiquewhite;">
+            <h3 class="my-3">تسک های ناتمام: </h3>
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th scope="col">ردیف</th>
+              <th scope="col">عنوان تسک</th>
+              <th scope="col">دسته بندی ها</th>
+              <th scope="col">زمان سررسید</th>
+              <th scope="col">مهلت</th>
+              <th scope="col">اولویت</th>
+                <th scope="col">وضعیت</th>
+              <th scope="col">ویرایش/حذف</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for task in due %}
+                <tr>
+                  <th scope="row">{{ forloop.counter }}</th>
+                  <td><a href="{% url 'details' task.pk%}">{{ task.title | capfirst }}</a></td>
+                  <td>
+                      {% for category in task.category.all %}
+                          <a href="{% url 'category_tasks_list' category.pk %}">{{ category.name }}</a>|
+                      {% endfor %}
+                  </td>
+                    <td>{{ task.deadline }}</td>
+                    <td>{% task_time_left task %}</td>
+{#                    <td>#}
+{#                        <div class="form-check form-switch">#}
+{#                          <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">#}
+{#                          <label class="form-check-label" for="flexSwitchCheckDefault">{{ task.get_status_display }}</label>#}
+{#                        </div>#}
+{#                    </td>#}
+                    <td>{{ task.get_priority_display }}</td>
+                    <td>{{ task.get_status_display }}</td>
+                    <td>
+                         <div class="dropdown">
+                              <a class="btn btn-secondary dropdown-toggle" href="" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                انتخاب کنید
+                              </a>
+
+                              <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <li><a class="dropdown-item" href="{% url 'edit_task' task.pk %}">ویرایش</a></li>
+                                <li><a class="dropdown-item" href="{% url 'delete_task' task.pk %}">حذف</a></li>
+                              </ul>
+                         </div>
+                  </td>
+                </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        </div>
+    </div>
+{% endblock %}

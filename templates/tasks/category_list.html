@@ -3,14 +3,36 @@
 {% block content %}
     <div class="container">
         <h1>دسته بندی ها</h1>
-    <div>
-        <h2>دسته های دارای تسک</h2>
-            <ul>
-                {% for obj in full_categories %}
-                    <li><a href="{% url 'category_tasks_list' obj.pk %}"></a>{{ obj.name }}</li>
-                {% endfor %}
-            </ul>
-        <h2>دسته های خالی</h2>
-    </div>
+        <div class="container my-5" style="background-color: lightblue; border-radius: 20px;">
+            <div class="row justify-content-around align-self-center">
+                <div class="card px-3 my-5 col-5" style="background-color: azure;border-radius: 10px;">
+                    <h2 class="py-3">دسته های دارای تسک</h2>
+                    <ul class="list-group m-3" style="border-radius: 10px;">
+                        {% for obj in object_list %}
+                            <a href="{% url 'category_tasks_list' obj.pk %}" class="list-group-item list-group-item-action dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: lightcyan" aria-current="true">{{ obj.name }}</a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <li><a class="dropdown-item" href="{% url 'category_tasks_list'  obj.pk%}">جزییات</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'edit_ctg' obj.pk%}">ویرایش</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'delete_ctg'  obj.pk%}">حذف</a></li>
+                                </ul>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="card px-3 my-5 col-5" style="background-color: azure;border-radius: 10px;">
+                    <h2 class="py-3">دسته های خالی</h2>
+                    <ul class="list-group m-3" style="border-radius: 10px;">
+                        {% for obj in empty_categories %}
+                            <a href="{% url 'category_tasks_list' obj.pk %}" class="list-group-item list-group-item-action dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: lightcyan" aria-current="true">{{ obj.name }}</a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <li><a class="dropdown-item" href="{% url 'category_tasks_list'  obj.pk%}">جزییات</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'edit_ctg' obj.pk%}">ویرایش</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'delete_ctg'  obj.pk%}">حذف</a></li>
+                                </ul>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

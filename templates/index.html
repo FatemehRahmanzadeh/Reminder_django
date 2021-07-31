@@ -2,6 +2,8 @@
     {% block title %}مدیریت تسک ها | خانه{% endblock %}
     {% block content %}
         <div class="container m-5">
+        {% if user.is_authenticated %}
+            <h1>سلام {{ user.username }}! خوش اومدی :)</h1>
             <ul>
                 {% if user.is_superuser %}
                     <li><a href="{% url 'admin:index' %}">ادمین</a></li>
@@ -12,5 +14,22 @@
             <a href="{% url 'task_create' %}">ایجاد تسک</a>
             <br>
             <a href="{% url 'ctg_create' %}">ایجاد دسته بندی</a>
+        {% else %}
+            <div class="card p-5 my-5">
+                <h1>سلام دوست من! به سایت خودت خوش اومدی :)</h1>
+                <div class="col-12 row p-5 m-2" style="background-color: aquamarine;border-radius: 10px;">
+                    <h3 class="col-6"> اگه تازه واردی ثبت نام کن</h3>
+                    <div class="col-6 text-center">
+                        <a href="{% url 'signup' %}" class="btn btn-success" role="button">ثبت نام</a>
+                    </div>
+                </div>
+                <div class="col-12 row p-5 m-2" style="background-color: cornflowerblue;border-radius: 10px;">
+                    <h3 class="col-6">اگه حساب کاربری داری وارد شو</h3>
+                    <div class="col-6 text-center">
+                        <a href="{% url 'login' %}" class="btn btn-primary" role="button">ورود</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
          </div>
     {% endblock %}
