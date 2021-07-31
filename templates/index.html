@@ -1,19 +1,26 @@
 {% extends 'base.html' %}
     {% block title %}مدیریت تسک ها | خانه{% endblock %}
     {% block content %}
-        <div class="container m-5">
+        <div class="container d-flex justify-content-center">
         {% if user.is_authenticated %}
-            <h1>سلام {{ user.username }}! خوش اومدی :)</h1>
-            <ul>
-                {% if user.is_superuser %}
-                    <li><a href="{% url 'admin:index' %}">ادمین</a></li>
-                {% endif %}
-                <li><a href="{% url 'categories' %}">دسته بندی ها</a></li>
-                <li><a href="{% url 'task_list' %}">تسک ها</a></li>
-            </ul>
-            <a href="{% url 'task_create' %}">ایجاد تسک</a>
-            <br>
-            <a href="{% url 'ctg_create' %}">ایجاد دسته بندی</a>
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="my-5">سلام {{ user.username }}! خوش اومدی :)</h1>
+                    <div class="row card p-5" style="background-color: azure;border-radius: 20px;">
+                        <ul class="list-group">
+                            {% if user.is_superuser %}
+                                <a href="{% url 'admin:index' %}" class="list-group-item list-group-item-action my-2 text-center" style="border-radius: 10px;">ادمین</a>
+                            {% endif %}
+                            <a href="{% url 'categories' %}" class="list-group-item list-group-item-action my-2 text-center" style="border-radius: 10px;">دسته بندی ها</a>
+                            <a href="{% url 'task_list' %}" class="list-group-item list-group-item-action my-2 text-center" style="border-radius: 10px;">تسک ها</a>
+                        </ul>
+                    </div>
+                    <div class="m-5" >
+                        <a href="{% url 'task_create' %}" class="btn btn-primary m-2 text-center" role="button">ایجاد تسک + </a>
+                        <a href="{% url 'ctg_create' %}" class="btn btn-success m-2 text-center" role="button">ایجاد دسته +</a>
+                    </div>
+                </div>
+            </div>
         {% else %}
             <div class="card p-5 my-5">
                 <h1>سلام دوست من! به سایت خودت خوش اومدی :)</h1>

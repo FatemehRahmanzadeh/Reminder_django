@@ -140,6 +140,7 @@ class CategoryListView(LoginRequiredMixin, ListView):
     """
     model = Category
     template_name = 'tasks/category_list.html'
+    paginate_by = 2
 
     def get_queryset(self):
         return Category.objects.filter(user=self.request.user).exclude(cat_tasks__isnull=True)
