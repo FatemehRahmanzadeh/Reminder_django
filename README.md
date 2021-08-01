@@ -8,6 +8,7 @@
 * registeration and personalize tasks and categories for every user
 * ....
 
+## Admin panel link is avalable just for Superuser
 ### If you like to run the code, create new superuser
 ### Please note that apps do not have migration files. You need to run migrations first,
 ```
