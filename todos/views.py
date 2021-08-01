@@ -1,10 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.serializers import serialize
+from django.http import HttpResponse
 from django.utils import timezone
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.urls import reverse_lazy
-
-from .forms import CreateTask
 from .models import Task, Category
 
 
@@ -17,6 +17,7 @@ class TaskListView(LoginRequiredMixin, ListView):
     """
     model = Task
     template_name = 'tasks/task_list.html'
+    paginate_by = 2
 
     def get_queryset(self):
         return Task.objects.filter(user=self.request.user).exclude(deadline__lt=timezone.now())
@@ -28,15 +29,6 @@ class TaskListView(LoginRequiredMixin, ListView):
         except Task.DoesNotExist:
             context['ex_tasks'] = None
         return context
-
-    # def tasks_as_json(self):
-    #     #     dictionaries = [obj.as_dict() for obj in self.get_queryset()]
-    #     #     return HttpResponse(json.dumps({"tasks": dictionaries}), content_type='application/json')
-
-    # def get_tasks(self, request, *args, **kwargs):
-    #     qs = Task.objects.all()
-    #     data = serialize("json", qs)
-    #     return JsonResponse(data, safe=False)
 
 
 class TaskDetailView(LoginRequiredMixin, DetailView):
@@ -70,18 +62,17 @@ class DeleteTaskView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class TaskCreateView(LoginRequiredMixin, CreateView):
     """
     ایجاد تسک جدید
-
     :model: مدل/جدول تسک در دیتابیس
     :template_name: صفحه ای که این ویو در آن رندر می شود
     :fields: فیلدهای موجود در فرم ایجاد تسک
     """
     model = Task
-    form_class = CreateTask
+    # form_class = CreateTask
     template_name = 'tasks/new_task.html'
 
-    # fields = ('title', 'description', 'category', 'status', 'priority', 'deadline')
+    fields = ('title', 'description', 'category', 'status', 'priority', 'deadline')
 
-    def get_form(self, form_class=CreateTask):
+    def get_form(self, form_class=None):
         """
         هر کاربر حق داره فقط دسته بندی هایی که خودش تعریف کرده ببینه و انتخاب کنه
         :param form_class: اگر فرم کاستوم تعریف شده بود
@@ -127,6 +118,12 @@ class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         obj = self.get_object()
         return obj.user == self.request.user
+
+
+def json_tasks(request):
+    qs = Task.objects.filter(user=request.user).all()
+    qs_json = serialize('json', qs)
+    return HttpResponse(qs_json, content_type='application/json')
 
 
 # category views

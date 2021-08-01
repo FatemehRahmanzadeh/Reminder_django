@@ -107,23 +107,31 @@
           </tbody>
         </table>
         </div>
-        <div class="pagination">
-            <span class="step-links">
-                {% if page_obj.has_previous %}
-                    <a href="?page=1">&laquo; first</a>
-                    <a href="?page={{ page_obj.previous_page_number }}">قبلی</a>
-                {% endif %}
+        <div>
+            <div class="container">
+               <div class="row justify-content-between text-center d-flex justify-self-center">
+                    <div class="col-3 pagination">
+                        <span class="step-links">
+                            {% if page_obj.has_previous %}
+                                <a href="?page=1">&laquo; اول</a>
+                                <a href="?page={{ page_obj.previous_page_number }}">قبلی</a>
+                            {% endif %}
 
-                <span class="current">
-                    صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}.
-                </span>
+                            <span class="current">
+                                صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}.
+                            </span>
 
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">بعدی</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-                {% endif %}
-            </span>
+                            {% if page_obj.has_next %}
+                                <a href="?page={{ page_obj.next_page_number }}">بعدی</a>
+                                <a href="?page={{ page_obj.paginator.num_pages }}">آخر &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="col-3">
+                        <a href="{% url 'tasks_json' %}" class="btn btn-success m-3" role="button" download>دانلود تسک ها</a>
+                    </div>
+               </div>
+            </div>
         </div>
-        <a href="#" download>دانلود تسک ها</a>
     </div>
 {% endblock %}

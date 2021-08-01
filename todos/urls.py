@@ -3,6 +3,7 @@ from .views import *
 
 urlpatterns = [
     path('', TaskListView.as_view(), name='task_list'),
+    path('tasks/json/', json_tasks, name='tasks_json'),
     path('task/create', TaskCreateView.as_view(), name='task_create'),
     path('task/<int:pk>/detail/', TaskDetailView.as_view(), name='details'),
     path('task/<int:pk>/edit/', TaskUpdateView.as_view(), name='edit_task'),

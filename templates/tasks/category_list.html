@@ -25,7 +25,7 @@
                         {% for obj in empty_categories %}
                             <a href="{% url 'category_tasks_list' obj.pk %}" class="list-group-item list-group-item-action dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: lightcyan" aria-current="true">{{ obj.name }}</a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <li><a class="dropdown-item" href="{% url 'category_tasks_list'  obj.pk%}">جزییات</a></li>
+                                    <li><a class="dropdown-item" href="">جزییاتی ندارد</a></li>
                                     <li><a class="dropdown-item" href="{% url 'edit_ctg' obj.pk%}">ویرایش</a></li>
                                     <li><a class="dropdown-item" href="{% url 'delete_ctg'  obj.pk%}">حذف</a></li>
                                 </ul>
@@ -34,5 +34,29 @@
                 </div>
             </div>
         </div>
+        <div class="container">
+               <div class="row justify-content-between text-center d-flex justify-self-center">
+                    <div class="col-3 pagination">
+                        <span class="step-links">
+                            {% if page_obj.has_previous %}
+                                <a href="?page=1" class="btn btn-light m-2" role="button">&laquo; اول</a>
+                                <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-light m-2" role="button">قبلی</a>
+                            {% endif %}
+
+                            <span class="current">
+                                صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}.
+                            </span>
+
+                            {% if page_obj.has_next %}
+                                <a href="?page={{ page_obj.next_page_number }}" class="btn btn-light m-2" role="button">بعدی</a>
+                                <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-light m-2" role="button">آخر &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="col-3">
+                        <a href="{% url 'tasks_json' %}" class="btn btn-success m-3" role="button" download>دانلود تسک ها</a>
+                    </div>
+               </div>
+            </div>
     </div>
 {% endblock %}
