@@ -17,15 +17,16 @@ class TaskListView(LoginRequiredMixin, ListView):
     """
     model = Task
     template_name = 'tasks/task_list.html'
-    paginate_by = 2
+    paginate_by = 20
 
     def get_queryset(self):
-        return Task.objects.filter(user=self.request.user).exclude(deadline__lt=timezone.now())
+        return Task.objects.filter(user=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super(TaskListView, self).get_context_data(**kwargs)
         try:
             context['ex_tasks'] = Task.objects.get_ex_tasks().filter(user=self.request.user)
+            context['early_tasks'] = Task.objects.get_early_tasks().filter(user=self.request.user)
         except Task.DoesNotExist:
             context['ex_tasks'] = None
         return context
@@ -137,17 +138,19 @@ class CategoryListView(LoginRequiredMixin, ListView):
     """
     model = Category
     template_name = 'tasks/category_list.html'
-    paginate_by = 2
+    paginate_by = 20
 
     def get_queryset(self):
-        return Category.objects.filter(user=self.request.user).exclude(cat_tasks__isnull=True)
+        return Category.objects.filter(user=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super(CategoryListView, self).get_context_data(**kwargs)
         try:
             context['empty_categories'] = Category.objects.empty_categories().filter(user=self.request.user)
+            context['full_categories'] = Category.objects.full_categories().filter(user=self.request.user)
         except Category.DoesNotExist:
             context['empty_categories'] = None
+            context['full_categories'] = None
         return context
 
 

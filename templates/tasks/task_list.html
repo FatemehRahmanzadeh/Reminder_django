@@ -19,13 +19,13 @@
             </tr>
           </thead>
           <tbody>
-            {% for task in object_list %}
+            {% for task in early_tasks %}
                 <tr>
                   <th scope="row">{{ forloop.counter }}</th>
-                  <td><a href="{% url 'details' task.pk%}">{{ task.title |capfirst }}</a></td>
+                  <td><a href="{% url 'details' task.pk%}" class="text-decoration-none" style="color:navy">{{ task.title |capfirst }}</a></td>
                   <td>
                       {% for category in task.category.all %}
-                          <a href="{% url 'category_tasks_list' category.pk %}">{{ category.name }}</a>|
+                          <a href="{% url 'category_tasks_list' category.pk %}" class="text-decoration-none" >{{ category.name }}</a>|
                       {% endfor %}
                   </td>
                     <td>{{ task.deadline }}</td>
@@ -74,10 +74,10 @@
             {% for task in ex_tasks %}
                 <tr>
                   <th scope="row">{{ forloop.counter }}</th>
-                  <td><a href="{% url 'details' task.pk%}">{{ task.title | capfirst }}</a></td>
+                  <td><a href="{% url 'details' task.pk%}" class="text-decoration-none" style="color:navy">{{ task.title | capfirst }}</a></td>
                   <td>
                       {% for category in task.category.all %}
-                          <a href="{% url 'category_tasks_list' category.pk %}">{{ category.name }}</a>|
+                          <a href="{% url 'category_tasks_list' category.pk %}" class="text-decoration-none" >{{ category.name }}</a>|
                       {% endfor %}
                   </td>
                     <td>{{ task.deadline }}</td>

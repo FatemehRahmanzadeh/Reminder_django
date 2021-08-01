@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}لیست تسک ها{% endblock %}
+{% block title %}لیست دسته ها{% endblock %}
 {% block content %}
     <div class="container">
         <h1>دسته بندی ها</h1>
@@ -8,7 +8,7 @@
                 <div class="card px-3 my-5 col-5" style="background-color: azure;border-radius: 10px;">
                     <h2 class="py-3">دسته های دارای تسک</h2>
                     <ul class="list-group m-3" style="border-radius: 10px;">
-                        {% for obj in object_list %}
+                        {% for obj in full_categories %}
                             <a href="{% url 'category_tasks_list' obj.pk %}" class="list-group-item list-group-item-action dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: lightcyan" aria-current="true">{{ obj.name }}</a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <li><a class="dropdown-item" href="{% url 'category_tasks_list'  obj.pk%}">جزییات</a></li>
@@ -36,7 +36,7 @@
         </div>
         <div class="container">
                <div class="row justify-content-between text-center d-flex justify-self-center">
-                    <div class="col-3 pagination">
+                    <div class="col-6 pagination">
                         <span class="step-links">
                             {% if page_obj.has_previous %}
                                 <a href="?page=1" class="btn btn-light m-2" role="button">&laquo; اول</a>
